@@ -60,6 +60,16 @@ The app will be running at **http://localhost:3000**
 
 ![Transactions](docs/transactions.png)
 
+### Transaction Map View
+- **List/Map toggle** — Animated pill switch to view transactions on an interactive OpenStreetMap
+- **GPS-tagged pins** — Custom SVG markers (orange = expense, green = income) plotted across Indian cities (Delhi, Mumbai, Bangalore, Hyderabad, Chennai, Jaipur, Pune, Gurgaon)
+- **Rich popups** — Tap any pin to see merchant name, amount, date, and address
+- **Locate on Map** — Click the 📍 button on any transaction row to fly to its location with smooth animation
+- **Stats bar** — Shows total locations, cities covered, and amount spent
+- **Same filters** — Category, type, and date range filters apply to both List and Map views
+
+![Map View](docs/map.png)
+
 ### 3. Role-Based UI
 - **Toggle** between Admin and Viewer roles via the header button
 - **Admin** — Can add, edit, and delete transactions
@@ -76,7 +86,17 @@ The app will be running at **http://localhost:3000**
 
 ![Insights](docs/insights.png)
 
-### 5. State Management
+### 5. Savings Goals
+- **Create goals** — Set financial targets with title, amount, and deadline
+- **Overall progress** — Summary card showing total saved vs total target with animated gradient progress bar
+- **Individual goal cards** — Each goal shows progress percentage, amounts, and deadline
+- **Add funds** — Increment savings toward each goal
+- **Active goals count** and remaining amount at a glance
+- State managed via `goalsSlice` with localStorage persistence
+
+![Goals](docs/goals.png)
+
+### 6. State Management
 - **Redux Toolkit** with three slices:
   - `transactionsSlice` — Transaction CRUD, search, filters, sort
   - `uiSlice` — Theme (dark/light), role (admin/viewer), sidebar state
@@ -84,7 +104,7 @@ The app will be running at **http://localhost:3000**
 - **localStorage persistence** — Transactions and goals survive page refreshes
 - **Typed hooks** — `useAppDispatch` and `useAppSelector` for type-safe Redux access
 
-### 6. UI/UX Quality
+### 7. UI/UX Quality
 - **Fully responsive** — Desktop sidebar, tablet layout, mobile bottom navigation bar
 - **Dark/Light mode** — Toggle via header button, respects system preference pattern
 - **Smooth animations** — Page transitions, card animations, staggered list rendering via Framer Motion
