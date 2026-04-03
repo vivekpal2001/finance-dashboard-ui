@@ -1,0 +1,95 @@
+@import "tailwindcss";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer utilities {
+  .perspective-1000 {
+    perspective: 1000px;
+  }
+  .preserve-3d {
+    transform-style: preserve-3d;
+  }
+  .backface-hidden {
+    backface-visibility: hidden;
+  }
+}
+
+/* Global responsive base styles */
+html {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+body {
+  overflow-x: hidden;
+  min-height: 100dvh;
+}
+
+/* Hide scrollbar utility */
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+/* Touch-friendly sizing for interactive elements on mobile */
+@media (max-width: 640px) {
+  select, input[type="text"], input[type="number"], input[type="date"] {
+    font-size: 16px; /* Prevent zoom on iOS */
+  }
+}
+
+/* Bottom nav styles for mobile */
+.mobile-bottom-nav {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+/* Leaflet overrides for dashboard design */
+.custom-pin-icon {
+  background: transparent !important;
+  border: none !important;
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 16px !important;
+  padding: 0 !important;
+  overflow: hidden;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12) !important;
+  border: 1px solid #f3f4f6;
+}
+
+.dark .leaflet-popup-content-wrapper {
+  background: #111827 !important;
+  border-color: #1f2937;
+}
+
+.leaflet-popup-content {
+  margin: 8px 12px !important;
+  font-family: inherit !important;
+}
+
+.leaflet-popup-tip {
+  box-shadow: none !important;
+}
+
+.dark .leaflet-popup-tip {
+  background: #111827 !important;
+}
+
+.leaflet-popup-close-button {
+  color: #9ca3af !important;
+  font-size: 18px !important;
+  top: 6px !important;
+  right: 8px !important;
+}
+
+.leaflet-container {
+  font-family: inherit !important;
+  background: #f4f5f7;
+}
+
+.dark .leaflet-container {
+  background: #030712;
+}
