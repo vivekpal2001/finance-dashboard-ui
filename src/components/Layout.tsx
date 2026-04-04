@@ -187,7 +187,7 @@ export default function Layout() {
                 />
                 <div className="hidden md:block text-sm">
                   <p className="font-semibold text-gray-900 dark:text-white leading-none">
-                    Rahul Sharma
+                    Vivek Kumar
                   </p>
                   <p className="text-gray-400 text-xs mt-0.5">Co-Founder</p>
                 </div>

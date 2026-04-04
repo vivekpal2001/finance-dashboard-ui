@@ -48,7 +48,7 @@ export default function Dashboard() {
       className="space-y-4 sm:space-y-6 max-w-7xl mx-auto px-1 sm:px-0"
     >
       <div className="flex items-center justify-between gap-3">
-        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Overview</h2>
+        <h2 className="text-xl sm:text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Welcome Back, Vivek!</h2>
         <button
           onClick={handleShareSnapshot}
           disabled={isCapturing}

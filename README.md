@@ -2,7 +2,7 @@
 
 A modern, interactive finance dashboard built with React, TypeScript, and Tailwind CSS. Track spending, analyze patterns, and visualize transactions across an interactive map — all with a clean, responsive interface.
 
-![Dashboard Overview](docs/dashboard.png)
+![Dashboard Overview](docs/desktop_dark_dashboard.png)
 
 ## 🚀 Quick Start
 
@@ -35,6 +35,15 @@ The app will be running at **http://localhost:3000**
 | **Lucide React** | Icons |
 | **date-fns** | Date utilities |
 
+## 🌟 Latest Major Features
+
+- **Brainy Quick Add (NLP)** 🧠: Add transactions by simply typing naturally (e.g., "Spent 500 on Zomato yesterday"). The system auto-extracts the amount, category, date, and type!
+- **Receipt Scanner Simulation** 🧾: Drag-and-drop receipt scanning with animated laser effects that auto-fill the transaction form.
+- **Animated Sankey Diagram** 🌊: Cash Flow visualization using flowing wave particles (liquid-style SVG animation) linking Income to Expenses and Categories.
+- **Transaction Map View** 🗺️: Interactive map using Leaflet to plot transactions across India. Click "Locate" on any transaction to fly there!
+- **Mobile Experience Overhaul** 📱: Featuring a slide-in Hamburger menu, persistent bottom navigation, top-left Quick Add button, and mobile-optimized layouts.
+- **Advanced Pagination** 📄: Real-world, truncating pagination (`1 2 ... 14`) with fast-travel arrows.
+
 ## 📋 Features & Requirements Mapping
 
 ### 1. Dashboard Overview
@@ -45,7 +54,9 @@ The app will be running at **http://localhost:3000**
 - **Goal Tracker** — Visual progress toward savings goals
 - **AI Insights** — Smart highlights of spending patterns
 
-![Dashboard](docs/dashboard.png)
+![Dashboard Main](docs/desktop_dark_dashboard.png)
+<br/>
+![Dashboard Light Mode](docs/desktop_light_dashboard.png)
 
 ### 2. Transactions Section
 - Full transaction list with **date, amount, category, type, and merchant name**
@@ -58,7 +69,7 @@ The app will be running at **http://localhost:3000**
 - **Locate on Map** — Click the 📍 button on any GPS-tagged transaction to fly to its location on the map
 - **Export** — Download filtered transactions as CSV or JSON
 
-![Transactions](docs/transactions.png)
+![Transactions](docs/transactions_list.png)
 
 ### Transaction Map View
 - **List/Map toggle** — Animated pill switch to view transactions on an interactive OpenStreetMap
@@ -68,7 +79,7 @@ The app will be running at **http://localhost:3000**
 - **Stats bar** — Shows total locations, cities covered, and amount spent
 - **Same filters** — Category, type, and date range filters apply to both List and Map views
 
-![Map View](docs/map.png)
+![Map View](docs/map_view.png)
 
 ### 3. Role-Based UI
 - **Toggle** between Admin and Viewer roles via the header button
@@ -84,7 +95,7 @@ The app will be running at **http://localhost:3000**
 - **Activity Heatmap** — Weekly spending intensity map
 - **Smart Alerts** — Warns about unusual spending patterns
 
-![Insights](docs/insights.png)
+![Insights Flow](docs/sankey_diagram.png)
 
 ### 5. Savings Goals
 - **Create goals** — Set financial targets with title, amount, and deadline
@@ -94,7 +105,10 @@ The app will be running at **http://localhost:3000**
 - **Active goals count** and remaining amount at a glance
 - State managed via `goalsSlice` with localStorage persistence
 
-![Goals](docs/goals.png)
+![Goals Tracker](docs/savings_goals.png)
+
+### Mobile Experience
+![Mobile Layout](docs/mobile_dashboard.png)
 
 ### 6. State Management
 - **Redux Toolkit** with three slices:

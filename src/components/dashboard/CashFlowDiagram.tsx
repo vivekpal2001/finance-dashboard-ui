@@ -45,9 +45,14 @@ export default function CashFlowDiagram({ transactions }: CashFlowProps) {
     return { totalIncome: totalInc, totalExpenses: totalExp, totalSavings: savings, categories: sortedCategories };
   }, [transactions]);
 
-  const incomeBarHeight = 100; // percentage
   const expensePercentage = totalIncome > 0 ? (totalExpenses / totalIncome) * 100 : 80;
   const savingsPercentage = totalIncome > 0 ? (totalSavings / totalIncome) * 100 : 20;
+
+  // Generate flow path data for reuse (path d + id)
+  const incomeToExpensePath = `M 70 ${10 + (280 * (1 - expensePercentage / 100) / 2)} C 200 ${10 + (280 * (1 - expensePercentage / 100) / 2)}, 200 20, 330 20`;
+
+  const savingsPathY = 290 - (280 * savingsPercentage / 100);
+  const incomeToSavingsPath = `M 70 ${290 - (280 * savingsPercentage / 100) / 2} C 200 ${290 - (280 * savingsPercentage / 100) / 2}, 200 ${savingsPathY}, 330 ${savingsPathY}`;
 
   return (
     <div className="bg-white dark:bg-gray-900 rounded-2xl sm:rounded-[32px] p-5 sm:p-8 shadow-sm border border-gray-100 dark:border-gray-800">
@@ -91,6 +96,47 @@ export default function CashFlowDiagram({ transactions }: CashFlowProps) {
                 <stop offset="100%" stopColor={cat.color} stopOpacity="0.4" />
               </linearGradient>
             ))}
+
+            {/* Flowing particle gradients */}
+            <radialGradient id="particle-green">
+              <stop offset="0%" stopColor="#10B981" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#10B981" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="particle-orange">
+              <stop offset="0%" stopColor="#FF6B4A" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#FF6B4A" stopOpacity="0" />
+            </radialGradient>
+            <radialGradient id="particle-teal">
+              <stop offset="0%" stopColor="#0D9488" stopOpacity="0.9" />
+              <stop offset="100%" stopColor="#0D9488" stopOpacity="0" />
+            </radialGradient>
+
+            {/* Wave filter for glow */}
+            <filter id="glow">
+              <feGaussianBlur stdDeviation="2" result="coloredBlur" />
+              <feMerge>
+                <feMergeNode in="coloredBlur" />
+                <feMergeNode in="SourceGraphic" />
+              </feMerge>
+            </filter>
+
+            {/* Named paths for particle motion */}
+            <path id="flow-income-expense" d={incomeToExpensePath} />
+            {totalSavings > 0 && <path id="flow-income-savings" d={incomeToSavingsPath} />}
+            {categories.map((cat, i) => {
+              const barHeight = Math.max((280 * (cat.percentage / 100)), 16);
+              const spacing = 280 / categories.length;
+              const barY = 20 + i * spacing + (spacing - barHeight) / 2;
+              const expenseBarBottom = 20 + 280 * (expensePercentage / 100);
+              const startY = 20 + (expenseBarBottom - 20) * ((i + 0.5) / categories.length);
+              return (
+                <path
+                  key={`catpath-${i}`}
+                  id={`flow-expense-cat-${i}`}
+                  d={`M 390 ${startY} C 520 ${startY}, 520 ${barY + barHeight / 2}, 600 ${barY + barHeight / 2}`}
+                />
+              );
+            })}
           </defs>
 
           {/* INCOME BAR (Left) */}
@@ -112,7 +158,7 @@ export default function CashFlowDiagram({ transactions }: CashFlowProps) {
 
           {/* Flow: Income → Expenses */}
           <motion.path
-            d={`M 70 ${10 + (280 * (1 - expensePercentage / 100) / 2)} C 200 ${10 + (280 * (1 - expensePercentage / 100) / 2)}, 200 20, 330 20`}
+            d={incomeToExpensePath}
             fill="none"
             stroke="url(#income-to-expense)"
             strokeWidth={280 * (expensePercentage / 100)}
@@ -122,18 +168,49 @@ export default function CashFlowDiagram({ transactions }: CashFlowProps) {
             transition={{ duration: 1.2, delay: 0.3 }}
           />
 
+          {/* Animated wave particles: Income → Expenses */}
+          {[0, 1, 2, 3, 4].map(idx => (
+            <circle key={`ie-${idx}`} r="5" fill="url(#particle-green)" filter="url(#glow)" opacity="0.8">
+              <animateMotion
+                dur={`${2.5 + idx * 0.3}s`}
+                repeatCount="indefinite"
+                begin={`${idx * 0.5}s`}
+              >
+                <mpath href="#flow-income-expense" />
+              </animateMotion>
+              <animate attributeName="r" values="3;6;3" dur="1.5s" repeatCount="indefinite" begin={`${idx * 0.4}s`} />
+              <animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.5s" repeatCount="indefinite" begin={`${idx * 0.4}s`} />
+            </circle>
+          ))}
+
           {/* Flow: Income → Savings */}
           {totalSavings > 0 && (
-            <motion.path
-              d={`M 70 ${290 - (280 * savingsPercentage / 100) / 2} C 200 ${290 - (280 * savingsPercentage / 100) / 2}, 200 ${290 - (280 * savingsPercentage / 100)}, 330 ${290 - (280 * savingsPercentage / 100)}`}
-              fill="none"
-              stroke="url(#income-to-savings)"
-              strokeWidth={Math.max(280 * (savingsPercentage / 100), 8)}
-              strokeOpacity={0.15}
-              initial={{ pathLength: 0 }}
-              animate={{ pathLength: 1 }}
-              transition={{ duration: 1.2, delay: 0.5 }}
-            />
+            <>
+              <motion.path
+                d={incomeToSavingsPath}
+                fill="none"
+                stroke="url(#income-to-savings)"
+                strokeWidth={Math.max(280 * (savingsPercentage / 100), 8)}
+                strokeOpacity={0.15}
+                initial={{ pathLength: 0 }}
+                animate={{ pathLength: 1 }}
+                transition={{ duration: 1.2, delay: 0.5 }}
+              />
+              {/* Wave particles: Income → Savings */}
+              {[0, 1, 2].map(idx => (
+                <circle key={`is-${idx}`} r="4" fill="url(#particle-teal)" filter="url(#glow)" opacity="0.7">
+                  <animateMotion
+                    dur={`${3 + idx * 0.4}s`}
+                    repeatCount="indefinite"
+                    begin={`${idx * 0.8}s`}
+                  >
+                    <mpath href="#flow-income-savings" />
+                  </animateMotion>
+                  <animate attributeName="r" values="2;5;2" dur="1.8s" repeatCount="indefinite" begin={`${idx * 0.5}s`} />
+                  <animate attributeName="opacity" values="0.2;0.8;0.2" dur="1.8s" repeatCount="indefinite" begin={`${idx * 0.5}s`} />
+                </circle>
+              ))}
+            </>
           )}
 
           {/* EXPENSES BAR (Center) */}
@@ -197,6 +274,21 @@ export default function CashFlowDiagram({ transactions }: CashFlowProps) {
                   animate={{ pathLength: 1 }}
                   transition={{ duration: 0.8, delay: 0.8 + i * 0.1 }}
                 />
+
+                {/* Wave particles for each category flow */}
+                {[0, 1].map(idx => (
+                  <circle key={`cat-${i}-${idx}`} r="3" fill={cat.color} filter="url(#glow)" opacity="0.7">
+                    <animateMotion
+                      dur={`${2 + idx * 0.5}s`}
+                      repeatCount="indefinite"
+                      begin={`${1.5 + i * 0.3 + idx * 0.8}s`}
+                    >
+                      <mpath href={`#flow-expense-cat-${i}`} />
+                    </animateMotion>
+                    <animate attributeName="r" values="2;4;2" dur="1.2s" repeatCount="indefinite" begin={`${idx * 0.3}s`} />
+                    <animate attributeName="opacity" values="0.3;0.9;0.3" dur="1.2s" repeatCount="indefinite" begin={`${idx * 0.3}s`} />
+                  </circle>
+                ))}
 
                 {/* Category bar */}
                 <motion.rect
