@@ -35,7 +35,7 @@ The app will be running at **http://localhost:3000**
 | **Lucide React** | Icons |
 | **date-fns** | Date utilities |
 
-## 🌟 Latest Major Features
+## 🌟 Extra Major Features
 
 - **Brainy Quick Add (NLP)** 🧠: Add transactions by simply typing naturally (e.g., "Spent 500 on Zomato yesterday"). The system auto-extracts the amount, category, date, and type!
 - **Receipt Scanner Simulation** 🧾: Drag-and-drop receipt scanning with animated laser effects that auto-fill the transaction form.
