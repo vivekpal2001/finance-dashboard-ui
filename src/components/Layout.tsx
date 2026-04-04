@@ -70,8 +70,8 @@ export default function Layout() {
           "fixed inset-y-4 left-4 z-50 w-20 bg-white dark:bg-gray-900 rounded-[40px] py-8 shadow-sm border border-gray-100 dark:border-gray-800 flex-col items-center transform transition-transform duration-300 ease-in-out hidden lg:flex lg:fixed lg:inset-y-8 lg:left-8",
         )}
       >
-        <div className="w-12 h-12 bg-gray-900 dark:bg-white rounded-full flex items-center justify-center mb-8 shadow-md">
-          <Home className="w-6 h-6 text-white dark:text-gray-900" />
+        <div className="w-12 h-12 flex items-center justify-center mb-8">
+          <img src="/icon.png" alt="FinDash Logo" className="w-full h-full object-contain drop-shadow-md" />
         </div>
 
         <nav className="flex-1 flex flex-col gap-4 relative">
