@@ -12,6 +12,7 @@ import {
   Car,
   AlertCircle
 } from 'lucide-react';
+import CashFlowDiagram from '../components/dashboard/CashFlowDiagram';
 import { 
   BarChart, 
   Bar, 
@@ -222,6 +223,9 @@ export default function Insights() {
           </ResponsiveContainer>
         </div>
       </div>
+
+      {/* Cash Flow Sankey Diagram */}
+      <CashFlowDiagram transactions={items} />
 
       {/* Bottom Row */}
       <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">

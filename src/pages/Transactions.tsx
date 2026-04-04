@@ -23,7 +23,11 @@ import {
   List,
   Map,
   Loader2,
-  MapPin
+  MapPin,
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import TransactionModal from '../components/transactions/TransactionModal';
@@ -262,13 +266,13 @@ export default function Transactions() {
             </button>
           </div>
         </div>
-        <div className="flex items-center gap-2 sm:gap-3">
+        <div className="flex items-center justify-between sm:justify-end w-full sm:w-auto gap-2 sm:gap-3">
           <div className="relative group">
             <button className="flex items-center px-3 sm:px-4 py-2.5 sm:py-3 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-full text-sm font-medium hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors shadow-sm">
               <Download className="w-4 h-4 mr-1.5 sm:mr-2" />
               Export
             </button>
-            <div className="absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
+            <div className="absolute left-0 sm:left-auto sm:right-0 mt-2 w-32 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all z-10">
               <button onClick={() => handleExport('csv')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">CSV</button>
               <button onClick={() => handleExport('json')} className="block w-full text-left px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">JSON</button>
             </div>
@@ -546,20 +550,90 @@ export default function Transactions() {
       </div>
 
       {totalPages > 1 && (
-        <div className="flex justify-center items-center gap-2 mt-6 sm:mt-8 pb-4 sm:pb-8">
-          {Array.from({ length: totalPages }).map((_, i) => (
+        <div className="flex flex-col sm:flex-row justify-between items-center gap-3 mt-6 sm:mt-8 pb-4 sm:pb-8">
+          {/* Items count */}
+          <p className="text-xs font-medium text-gray-400 order-2 sm:order-1">
+            Showing {((currentPage - 1) * itemsPerPage) + 1}–{Math.min(currentPage * itemsPerPage, finalFilteredItems.length)} of {finalFilteredItems.length}
+          </p>
+
+          {/* Pagination controls */}
+          <div className="flex items-center gap-1.5 order-1 sm:order-2">
+            {/* First page */}
             <button
-              key={i}
-              onClick={() => setCurrentPage(i + 1)}
-              className={`w-9 h-9 sm:w-10 sm:h-10 rounded-full flex items-center justify-center text-xs sm:text-sm font-bold transition-all ${
-                currentPage === i + 1
-                  ? 'bg-[#FF6B4A] text-white shadow-lg shadow-orange-500/30 scale-110'
-                  : 'bg-white dark:bg-gray-900 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800'
-              }`}
+              onClick={() => setCurrentPage(1)}
+              disabled={currentPage === 1}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
             >
-              {i + 1}
+              <ChevronsLeft className="w-4 h-4" />
             </button>
-          ))}
+            {/* Previous */}
+            <button
+              onClick={() => setCurrentPage(p => Math.max(1, p - 1))}
+              disabled={currentPage === 1}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronLeft className="w-4 h-4" />
+            </button>
+
+            {/* Page numbers with truncation */}
+            {(() => {
+              const pages: (number | 'ellipsis')[] = [];
+              if (totalPages <= 7) {
+                for (let i = 1; i <= totalPages; i++) pages.push(i);
+              } else {
+                // Always show first page
+                pages.push(1);
+                if (currentPage > 3) pages.push('ellipsis');
+                // Middle range
+                const start = Math.max(2, currentPage - 1);
+                const end = Math.min(totalPages - 1, currentPage + 1);
+                for (let i = start; i <= end; i++) pages.push(i);
+                if (currentPage < totalPages - 2) pages.push('ellipsis');
+                // Always show last page
+                pages.push(totalPages);
+              }
+
+              return pages.map((page, idx) => {
+                if (page === 'ellipsis') {
+                  return (
+                    <span key={`ellipsis-${idx}`} className="w-9 h-9 flex items-center justify-center text-gray-400 text-sm">
+                      ···
+                    </span>
+                  );
+                }
+                return (
+                  <button
+                    key={page}
+                    onClick={() => setCurrentPage(page)}
+                    className={`w-9 h-9 rounded-full flex items-center justify-center text-sm font-bold transition-all ${
+                      currentPage === page
+                        ? 'bg-[#FF6B4A] text-white shadow-lg shadow-orange-500/30 scale-110'
+                        : 'bg-white dark:bg-gray-900 text-gray-500 hover:bg-gray-50 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-800'
+                    }`}
+                  >
+                    {page}
+                  </button>
+                );
+              });
+            })()}
+
+            {/* Next */}
+            <button
+              onClick={() => setCurrentPage(p => Math.min(totalPages, p + 1))}
+              disabled={currentPage === totalPages}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronRight className="w-4 h-4" />
+            </button>
+            {/* Last page */}
+            <button
+              onClick={() => setCurrentPage(totalPages)}
+              disabled={currentPage === totalPages}
+              className="w-9 h-9 rounded-full flex items-center justify-center text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 disabled:cursor-not-allowed transition-colors"
+            >
+              <ChevronsRight className="w-4 h-4" />
+            </button>
+          </div>
         </div>
       )}
 

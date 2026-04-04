@@ -4,6 +4,7 @@ import { X } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../../store/hooks';
 import { addTransaction, updateTransaction } from '../../store/slices/transactionsSlice';
 import { TransactionType } from '../../types';
+import ReceiptScanner from './ReceiptScanner';
 
 interface TransactionModalProps {
   isOpen: boolean;
@@ -100,6 +101,20 @@ export default function TransactionModal({ isOpen, onClose, transactionId }: Tra
             <X className="w-5 h-5" />
           </button>
         </div>
+
+        {/* Receipt Scanner — only for new transactions */}
+        {!transactionId && (
+          <div className="mb-4">
+            <ReceiptScanner
+              onScanComplete={(data) => {
+                setDescription(data.description);
+                setAmount(data.amount);
+                setCategory(data.category);
+                setType(data.type);
+              }}
+            />
+          </div>
+        )}
 
         <form onSubmit={handleSubmit} className="space-y-4">
           <div className="flex gap-4 p-1 bg-gray-100 dark:bg-gray-800 rounded-lg">

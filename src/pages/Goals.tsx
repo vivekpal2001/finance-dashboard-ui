@@ -42,13 +42,10 @@ export default function Goals() {
   const handleAddFunds = (e: React.FormEvent) => {
     e.preventDefault();
     if (selectedGoalId && fundAmount) {
-      const goal = items.find(g => g.id === selectedGoalId);
-      if (goal) {
-        dispatch(updateGoalProgress({
-          id: selectedGoalId,
-          amount: goal.currentAmount + parseFloat(fundAmount)
-        }));
-      }
+      dispatch(updateGoalProgress({
+        id: selectedGoalId,
+        amount: parseFloat(fundAmount)
+      }));
       setIsFundModalOpen(false);
       setFundAmount('');
       setSelectedGoalId(null);
